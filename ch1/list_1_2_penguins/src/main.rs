@@ -1,0 +1,32 @@
+fn main() {
+    let penguin_data = "\
+    common name,length (cm)
+    Little penguin,33
+    Yellow-eyed penguin,65
+    Fiordland penguin,60
+    Invalid,data
+    ";
+
+    let records = penguin_data.lines();
+
+    for (i, record) in records.enumerate() {
+        if i == 0 || record.trim().len() == 0 { // ヘッダと空白のみの行をスキップ
+            continue;
+        }
+
+        let field: Vec<_> = record  // テキスト行で処理を開始
+            .split(',')
+            .map(|field| field.trim())
+            .collect();
+
+        if cfg!(debug_assertions) {
+            eprintln!("debug: {:?} -> {:?}",
+                        record, field);
+        }
+
+        let name = field[0];
+        if let Ok(length) = field[1].parse::<f32>() {
+            println!("{}, {}cm", name, length);
+        }
+    }
+}
